@@ -1,9 +1,12 @@
 import { fetchBreeds } from './cat-api.js';
 import { fetchCatByBreed } from './cat-api.js';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const refs = {
   select: document.querySelector('.breed-select'),
   container: document.querySelector('.cat-info'),
+  loader: document.querySelector('.loader'),
+  error: document.querySelector('.error'),
 };
 
 fetchBreeds()
@@ -16,7 +19,7 @@ fetchBreeds()
       .join('');
     refs.select.insertAdjacentHTML('beforeend', cats);
   })
-  .catch(err => console.log(err));
+  .catch(err => Notify.failure(refs.error.textContent));
 
 const onSelectChange = event => {
   const breedId = refs.select.value;
@@ -26,13 +29,13 @@ const onSelectChange = event => {
       const infoAboutCat = data[0].breeds[0];
 
       const markup = `<img src="${data[0].url}" alt="" width="300" height="auto">
-       <h1>${infoAboutCat.name}</h1>
-       <p>${infoAboutCat.description}</p>
-       <p>Temperament: ${infoAboutCat.temperament}</p>`;
+       <div><h1 class="title">${infoAboutCat.name}</h1>
+       <p class="descr">${infoAboutCat.description}</p>
+       <p><span class="cat-temp">Temperament:</span> ${infoAboutCat.temperament}</p></div>`;
 
       refs.container.innerHTML = markup;
     })
-    .catch(err => console.log(err));
+    .catch(err => Notify.failure(refs.error.textContent));
 };
 
 refs.select.addEventListener('change', onSelectChange);
