@@ -22,7 +22,16 @@ const onSelectChange = event => {
   const breedId = refs.select.value;
 
   fetchCatByBreed(breedId)
-    .then(data => console.log(data))
+    .then(data => {
+      const infoAboutCat = data[0].breeds[0];
+
+      const markup = `<img src="${data[0].url}" alt="" width="300" height="auto">
+       <h1>${infoAboutCat.name}</h1>
+       <p>${infoAboutCat.description}</p>
+       <p>Temperament: ${infoAboutCat.temperament}</p>`;
+
+      refs.container.innerHTML = markup;
+    })
     .catch(err => console.log(err));
 };
 
