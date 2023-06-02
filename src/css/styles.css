@@ -1,5 +1,7 @@
 body {
-  background-color: #777b7e;
+  background: linear-gradient(#e66465, #9198e5);
+  width: 100vw;
+  height: 100vh;
 }
 
 h1,
@@ -55,74 +57,61 @@ img {
 }
 
 .loader {
-  transform: rotateZ(45deg);
-  perspective: 1000px;
+  width: 360px;
+  height: 360px;
   border-radius: 50%;
-  width: 48px;
-  height: 48px;
-  color: #fff;
+  display: inline-block;
+  position: relative;
+  top: 50px;
+  left: 100px;
+  border: 3px solid;
+  border-color: #fff #fff transparent transparent;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
 }
-.loader:before,
-.loader:after {
+.loader::after,
+.loader::before {
   content: '';
-  display: block;
+  box-sizing: border-box;
   position: absolute;
-  top: 0;
   left: 0;
-  width: inherit;
-  height: inherit;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  border: 3px solid;
+  border-color: transparent transparent #ff3d00 #ff3d00;
+  width: 240px;
+  height: 240px;
   border-radius: 50%;
-  transform: rotateX(70deg);
-  animation: 1s spin linear infinite;
+  box-sizing: border-box;
+  animation: rotationBack 0.5s linear infinite;
+  transform-origin: center center;
 }
-.loader:after {
-  color: #ff3d00;
-  transform: rotateY(70deg);
-  animation-delay: 0.4s;
+.loader::before {
+  width: 180px;
+  height: 180px;
+  border-color: #fff #fff transparent transparent;
+  animation: rotation 1.5s linear infinite;
 }
 
-@keyframes rotate {
+@keyframes rotation {
   0% {
-    transform: translate(-50%, -50%) rotateZ(0deg);
+    transform: rotate(0deg);
   }
   100% {
-    transform: translate(-50%, -50%) rotateZ(360deg);
+    transform: rotate(360deg);
   }
 }
-
-@keyframes rotateccw {
+@keyframes rotationBack {
   0% {
-    transform: translate(-50%, -50%) rotate(0deg);
+    transform: rotate(0deg);
   }
   100% {
-    transform: translate(-50%, -50%) rotate(-360deg);
+    transform: rotate(-360deg);
   }
 }
 
-@keyframes spin {
-  0%,
-  100% {
-    box-shadow: 0.2em 0px 0 0px currentcolor;
-  }
-  12% {
-    box-shadow: 0.2em 0.2em 0 0 currentcolor;
-  }
-  25% {
-    box-shadow: 0 0.2em 0 0px currentcolor;
-  }
-  37% {
-    box-shadow: -0.2em 0.2em 0 0 currentcolor;
-  }
-  50% {
-    box-shadow: -0.2em 0 0 0 currentcolor;
-  }
-  62% {
-    box-shadow: -0.2em -0.2em 0 0 currentcolor;
-  }
-  75% {
-    box-shadow: 0px -0.2em 0 0 currentcolor;
-  }
-  87% {
-    box-shadow: 0.2em -0.2em 0 0 currentcolor;
-  }
+.is-hidden {
+  display: none;
 }

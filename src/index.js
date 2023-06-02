@@ -1,5 +1,4 @@
-import { fetchBreeds } from './cat-api.js';
-import { fetchCatByBreed } from './cat-api.js';
+import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const refs = {
@@ -9,19 +8,34 @@ const refs = {
   error: document.querySelector('.error'),
 };
 
-fetchBreeds()
-  .then(data => {
-    console.log(data);
-    const cats = data
-      .map(cat => {
-        return `<option value="${cat.id}">${cat.name}</option>`;
-      })
-      .join('');
-    refs.select.insertAdjacentHTML('beforeend', cats);
-  })
-  .catch(err => Notify.failure(refs.error.textContent));
+function loadCatsBreeds() {
+  refs.loader.classList.toggle('is-hidden');
+  refs.select.classList.toggle('is-hidden');
+
+  fetchBreeds()
+    .then(data => {
+      console.log(data);
+      const cats = data
+        .map(cat => {
+          return `<option value="${cat.id}">${cat.name}</option>`;
+        })
+        .join('');
+      refs.select.insertAdjacentHTML('beforeend', cats);
+    })
+    .catch(err => Notify.failure(refs.error.textContent))
+    .finally(() => {
+      setTimeout(() => {
+        refs.loader.classList.toggle('is-hidden');
+        refs.select.classList.toggle('is-hidden');
+      }, 500);
+    });
+}
+loadCatsBreeds();
 
 const onSelectChange = event => {
+  refs.loader.classList.toggle('is-hidden');
+  refs.container.classList.toggle('is-hidden');
+
   const breedId = refs.select.value;
 
   fetchCatByBreed(breedId)
@@ -35,7 +49,11 @@ const onSelectChange = event => {
 
       refs.container.innerHTML = markup;
     })
-    .catch(err => Notify.failure(refs.error.textContent));
+    .catch(err => Notify.failure(refs.error.textContent))
+    .finally(() => {
+      refs.loader.classList.toggle('is-hidden');
+      refs.container.classList.toggle('is-hidden');
+    });
 };
 
 refs.select.addEventListener('change', onSelectChange);
